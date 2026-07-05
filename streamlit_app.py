@@ -1,6 +1,7 @@
 import html
 import pickle
 import re
+import time
 from pathlib import Path
 
 import nltk
@@ -205,6 +206,9 @@ def apply_page_styles() -> None:
     st.markdown(
         """
         <style>
+        html {
+            scroll-behavior: smooth;
+        }
         .block-container {
             max-width: 1120px;
             padding-top: 3.4rem;
@@ -218,6 +222,12 @@ def apply_page_styles() -> None:
             border-radius: 8px;
             padding: 0.75rem 0.9rem;
             background: rgba(128, 128, 128, 0.055);
+            transition: transform 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
+        }
+        div[data-testid="stMetric"]:hover {
+            transform: translateY(-2px);
+            border-color: rgba(122, 162, 255, 0.42);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
         }
         div[data-testid="stMetricValue"] {
             font-size: 1.55rem;
@@ -245,6 +255,36 @@ def apply_page_styles() -> None:
             font-size: 0.86rem;
             color: rgba(245, 245, 245, 0.86);
         }
+        .hero-metrics {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 0.65rem;
+            margin-top: 0.9rem;
+            max-width: 850px;
+            animation: softFadeIn 420ms ease-out;
+        }
+        .hero-metric {
+            border: 1px solid rgba(128, 128, 128, 0.18);
+            border-radius: 8px;
+            padding: 0.62rem 0.72rem;
+            background: rgba(128, 128, 128, 0.04);
+            transition: transform 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
+        }
+        .hero-metric:hover {
+            transform: translateY(-2px);
+            border-color: rgba(122, 162, 255, 0.42);
+            box-shadow: 0 8px 22px rgba(0, 0, 0, 0.16);
+        }
+        .hero-metric-value {
+            font-size: 1rem;
+            font-weight: 750;
+            line-height: 1.2;
+        }
+        .hero-metric-label {
+            color: rgba(160, 160, 160, 0.95);
+            font-size: 0.76rem;
+            margin-top: 0.12rem;
+        }
         .eyebrow {
             color: #7aa2ff;
             font-size: 0.85rem;
@@ -261,6 +301,13 @@ def apply_page_styles() -> None:
             border-radius: 10px;
             padding: 1.15rem 1.25rem;
             background: rgba(128, 128, 128, 0.045);
+            animation: softFadeIn 360ms ease-out;
+            transition: transform 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
+        }
+        .result-card:hover {
+            transform: translateY(-2px);
+            border-color: rgba(122, 162, 255, 0.42);
+            box-shadow: 0 10px 28px rgba(0, 0, 0, 0.20);
         }
         .result-label {
             color: rgba(128, 128, 128, 0.95);
@@ -280,6 +327,24 @@ def apply_page_styles() -> None:
             background: rgba(128, 128, 128, 0.035);
             height: 100%;
         }
+        div[data-testid="stVerticalBlockBorderWrapper"] {
+            transition: transform 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
+        }
+        div[data-testid="stVerticalBlockBorderWrapper"]:hover {
+            transform: translateY(-1px);
+            border-color: rgba(122, 162, 255, 0.30);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.14);
+        }
+        .stButton button,
+        .stLinkButton a {
+            transition: transform 150ms ease, border-color 150ms ease, box-shadow 150ms ease;
+            border-radius: 8px;
+        }
+        .stButton button:hover,
+        .stLinkButton a:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 8px 22px rgba(0, 0, 0, 0.16);
+        }
         .roadmap {
             border: 1px solid rgba(128, 128, 128, 0.18);
             border-radius: 10px;
@@ -295,6 +360,18 @@ def apply_page_styles() -> None:
             margin: 0.18rem;
             background: rgba(122, 162, 255, 0.08);
             font-size: 0.92rem;
+        }
+        @keyframes softFadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @media (max-width: 760px) {
+            .hero-metrics {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+            .app-hero h1 {
+                font-size: 1.85rem;
+            }
         }
         </style>
         """,
@@ -318,7 +395,11 @@ def render_sidebar() -> str:
             st.link_button("Portfolio", PORTFOLIO_URL, use_container_width=True)
         st.divider()
         st.caption("Applied NLP Project")
-        st.write("Building intelligent AI systems that solve real-world problems.")
+        st.write("✓ 161K Drug Reviews")
+        st.write("✓ TF-IDF Feature Engineering")
+        st.write("✓ Linear SVM Classifier")
+        st.write("✓ 96.16% Test Accuracy")
+        st.write("✓ Streamlit Deployment")
     return page
 
 
@@ -370,20 +451,62 @@ def render_prediction_result(
         )
 
 
+def render_processing_sequence() -> None:
+    steps = [
+        "Validating input...",
+        "Cleaning review...",
+        "Removing stopwords...",
+        "Lemmatizing text...",
+        "TF-IDF vectorization...",
+        "Running Linear SVM...",
+        "Calculating sentiment...",
+        "Prediction ready",
+    ]
+    progress_placeholder = st.empty()
+    status_placeholder = st.empty()
+
+    for index, step in enumerate(steps, start=1):
+        progress_placeholder.progress(index / len(steps), text=step)
+        status_placeholder.caption(f"✓ {step}")
+        time.sleep(0.18)
+
+    progress_placeholder.empty()
+    status_placeholder.empty()
+
+
 def render_prediction_page(model, tfidf, label_encoder, nlp_tools) -> None:
     st.markdown(
         """
         <div class="app-hero">
             <div class="eyebrow">AI Prediction System</div>
-            <h1>Patient Condition Classification</h1>
+            <h1>Patient Condition Classification using NLP</h1>
             <p class="muted">
-            An applied NLP product that classifies patient drug reviews into
-            condition categories using an interpretable TF-IDF + Linear SVM pipeline.
+            An end-to-end Natural Language Processing application that classifies patient
+            drug reviews into medical condition categories using TF-IDF feature engineering
+            and a Linear SVM classifier.
             </p>
             <span class="trust-chip">TF-IDF NLP</span>
             <span class="trust-chip">Linear SVM</span>
             <span class="trust-chip">96.16% accuracy</span>
             <span class="trust-chip">3 supported classes</span>
+            <div class="hero-metrics">
+                <div class="hero-metric">
+                    <div class="hero-metric-value">161,297</div>
+                    <div class="hero-metric-label">Drug Reviews</div>
+                </div>
+                <div class="hero-metric">
+                    <div class="hero-metric-value">13,944</div>
+                    <div class="hero-metric-label">Training Samples</div>
+                </div>
+                <div class="hero-metric">
+                    <div class="hero-metric-value">96.16%</div>
+                    <div class="hero-metric-label">Accuracy</div>
+                </div>
+                <div class="hero-metric">
+                    <div class="hero-metric-value">94.60%</div>
+                    <div class="hero-metric-label">Macro F1</div>
+                </div>
+            </div>
         </div>
         """,
         unsafe_allow_html=True,
@@ -438,6 +561,7 @@ def render_prediction_page(model, tfidf, label_encoder, nlp_tools) -> None:
                     "Please enter a more detailed review so the model has enough context."
                 )
             else:
+                render_processing_sequence()
                 with st.spinner("Analyzing review text..."):
                     cleaned_review = clean_review(
                         user_review,
