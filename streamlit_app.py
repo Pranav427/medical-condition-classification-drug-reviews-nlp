@@ -247,6 +247,9 @@ def apply_page_styles() -> None:
         }
         .app-hero h1 { font-size: 2.25rem; line-height: 1.12; margin-bottom: 0.55rem; }
         .app-hero p { font-size: 1.02rem; max-width: 760px; }
+        h1 a, h2 a, h3 a {
+            display: none !important;
+        }
         .trust-chip {
             display: inline-block;
             border: 1px solid rgba(128, 128, 128, 0.22);
@@ -511,10 +514,15 @@ def render_prediction_result(
 ) -> None:
     st.subheader("Prediction Result")
 
-    st.markdown('<div class="result-card">', unsafe_allow_html=True)
-    st.markdown('<div class="result-label">Predicted condition</div>', unsafe_allow_html=True)
-    st.markdown(f'<div class="result-value">{condition}</div>', unsafe_allow_html=True)
-    st.markdown("</div>", unsafe_allow_html=True)
+    st.markdown(
+        f"""
+        <div class="result-card">
+            <div class="result-label">Predicted condition</div>
+            <div class="result-value">{html.escape(condition)}</div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
     result_cols = st.columns(3)
     result_cols[0].metric("Sentiment", sentiment)
