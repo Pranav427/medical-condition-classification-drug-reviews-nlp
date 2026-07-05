@@ -5,6 +5,8 @@ import time
 from pathlib import Path
 
 import nltk
+import matplotlib.pyplot as plt
+import numpy as np
 import pandas as pd
 import streamlit as st
 from nltk.corpus import stopwords
@@ -361,6 +363,36 @@ def apply_page_styles() -> None:
             background: rgba(122, 162, 255, 0.08);
             font-size: 0.92rem;
         }
+        .workflow {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 0.55rem;
+            border: 1px solid rgba(128, 128, 128, 0.18);
+            border-radius: 10px;
+            padding: 1rem 1.1rem;
+            background: rgba(128, 128, 128, 0.035);
+            margin: 0.8rem 0 1.2rem 0;
+        }
+        .workflow-node {
+            border: 1px solid rgba(122, 162, 255, 0.34);
+            border-radius: 8px;
+            padding: 0.56rem 0.78rem;
+            background: rgba(122, 162, 255, 0.08);
+            font-size: 0.88rem;
+            font-weight: 650;
+            white-space: nowrap;
+        }
+        .workflow-arrow {
+            color: rgba(245, 245, 245, 0.62);
+            font-size: 1rem;
+        }
+        .takeaway-card {
+            border: 1px solid rgba(122, 162, 255, 0.28);
+            border-radius: 10px;
+            padding: 1rem 1.1rem;
+            background: rgba(122, 162, 255, 0.055);
+        }
         @keyframes softFadeIn {
             from { opacity: 0; transform: translateY(8px); }
             to { opacity: 1; transform: translateY(0); }
@@ -377,6 +409,64 @@ def apply_page_styles() -> None:
         """,
         unsafe_allow_html=True,
     )
+
+
+def render_bar_chart(
+    data: pd.DataFrame,
+    x: str,
+    y: str,
+    *,
+    horizontal: bool = False,
+    height: float = 3.1,
+    rotation: int = 0,
+    grouped_columns: list[str] | None = None,
+) -> None:
+    fig, ax = plt.subplots(figsize=(8.2, height), facecolor="#0e1117")
+    ax.set_facecolor("#0e1117")
+
+    if grouped_columns:
+        positions = np.arange(len(data[x]))
+        width = 0.34
+        colors = ["#0f73c9", "#78bdf2"]
+        for index, column in enumerate(grouped_columns):
+            offset = (index - (len(grouped_columns) - 1) / 2) * width
+            ax.bar(
+                positions + offset,
+                data[column],
+                width=width,
+                color=colors[index],
+                label=column,
+            )
+        ax.set_xticks(positions)
+        ax.set_xticklabels(data[x])
+        ax.set_ylim(0.88, 0.98)
+        ax.legend(frameon=False, labelcolor="#f5f5f5", loc="lower left")
+    elif horizontal:
+        ax.barh(data[x], data[y], color="#78bdf2")
+        ax.invert_yaxis()
+    else:
+        ax.bar(data[x], data[y], color="#78bdf2")
+
+    ax.grid(axis="y", color="#30343d", linewidth=0.8)
+    ax.set_axisbelow(True)
+    ax.tick_params(colors="#d7d9df", labelsize=9)
+    ax.tick_params(axis="x", rotation=rotation)
+    for spine in ax.spines.values():
+        spine.set_visible(False)
+    ax.set_xlabel("")
+    ax.set_ylabel("")
+    fig.tight_layout()
+    st.pyplot(fig, use_container_width=True)
+    plt.close(fig)
+
+
+def render_workflow(steps: list[str]) -> None:
+    nodes = []
+    for index, step in enumerate(steps):
+        nodes.append(f'<span class="workflow-node">{step}</span>')
+        if index < len(steps) - 1:
+            nodes.append('<span class="workflow-arrow">→</span>')
+    st.markdown(f'<div class="workflow">{"".join(nodes)}</div>', unsafe_allow_html=True)
 
 
 def render_sidebar() -> str:
@@ -677,17 +767,19 @@ def render_case_study_page() -> None:
                 "Patient drug reviews are unstructured. The product goal is to organize "
                 "review text into clinically relevant condition categories for analysis."
             )
-            st.bar_chart(DATASET_COUNTS.set_index("Condition"))
+            render_bar_chart(DATASET_COUNTS, "Condition", "Reviews", horizontal=True)
         with right:
             render_case_section(
                 "EDA Focus",
                 "The analysis examined class balance, review length, rating behavior, "
                 "frequent terms, and sentiment distribution across the selected classes."
             )
-            st.bar_chart(REVIEW_LENGTH_DISTRIBUTION.set_index("Review length"))
+            render_bar_chart(REVIEW_LENGTH_DISTRIBUTION, "Review length", "Reviews")
         chart_cols = st.columns(2)
-        chart_cols[0].bar_chart(RATING_DISTRIBUTION.set_index("Rating"))
-        chart_cols[1].bar_chart(SENTIMENT_DISTRIBUTION.set_index("Sentiment"))
+        with chart_cols[0]:
+            render_bar_chart(RATING_DISTRIBUTION, "Rating", "Reviews")
+        with chart_cols[1]:
+            render_bar_chart(SENTIMENT_DISTRIBUTION, "Sentiment", "Reviews")
 
     with tabs[1]:
         render_case_section(
@@ -695,17 +787,9 @@ def render_case_study_page() -> None:
             "The deployed app mirrors notebook preprocessing: HTML cleanup, URL removal, "
             "punctuation removal, stopword filtering, and lemmatization before TF-IDF."
         )
-        st.graphviz_chart(
-            """
-            digraph {
-                rankdir=LR;
-                node [shape=box, style="rounded"];
-                Review -> CleanText -> Tokens -> Lemmas -> TFIDF -> Features;
-            }
-            """
-        )
+        render_workflow(["Review", "Clean Text", "Tokens", "Lemmas", "TF-IDF", "Features"])
         st.subheader("Common Terms After Cleaning")
-        st.bar_chart(TOP_TERMS.set_index("Term"))
+        render_bar_chart(TOP_TERMS, "Term", "Frequency", horizontal=True)
 
     with tabs[2]:
         render_case_section(
@@ -713,7 +797,14 @@ def render_case_study_page() -> None:
             "Four classical ML models were compared. Linear SVM gave the best balance of "
             "macro F1, accuracy, speed, and deployment simplicity."
         )
-        st.bar_chart(MODEL_COMPARISON.set_index("Model")[["Macro F1", "Accuracy"]])
+        render_bar_chart(
+            MODEL_COMPARISON,
+            "Model",
+            "Accuracy",
+            height=3.4,
+            rotation=0,
+            grouped_columns=["Macro F1", "Accuracy"],
+        )
         st.dataframe(
             MODEL_COMPARISON.style.format({"Macro F1": "{:.3f}", "Accuracy": "{:.3f}"}),
             use_container_width=True,
@@ -745,17 +836,18 @@ def render_case_study_page() -> None:
             "The runtime app loads saved artifacts, validates input, applies preprocessing, "
             "runs TF-IDF vectorization, predicts with Linear SVM, and displays results."
         )
-        st.graphviz_chart(
-            """
-            digraph {
-                rankdir=TB;
-                node [shape=box, style="rounded"];
-                User -> StreamlitUI -> InputValidation -> TextCleaning -> TFIDF;
-                TFIDF -> LinearSVM -> ResultsDashboard;
-                TextCleaning -> VaderSentiment -> ResultsDashboard;
-            }
-            """
+        render_workflow(
+            [
+                "User",
+                "Streamlit UI",
+                "Input Validation",
+                "Text Cleaning",
+                "TF-IDF",
+                "Linear SVM",
+                "Results Dashboard",
+            ]
         )
+        st.caption("Sentiment is calculated in parallel as supporting context.")
         deployment_cols = st.columns(2)
         with deployment_cols[0]:
             st.subheader("Application Architecture")
@@ -775,6 +867,17 @@ def render_case_study_page() -> None:
             st.write("- Clear limitations and medical disclaimer")
 
     st.divider()
+    st.markdown(
+        """
+        <div class="takeaway-card">
+            <strong>Recruiter Takeaway</strong><br>
+            Demonstrates end-to-end NLP, practical model evaluation, deployment-ready
+            engineering, and product judgment for a healthcare-adjacent AI workflow.
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+    st.write("")
     final_cols = st.columns(3)
     with final_cols[0]:
         with st.container(border=True):
