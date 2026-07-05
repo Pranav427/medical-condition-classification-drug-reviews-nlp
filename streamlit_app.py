@@ -870,7 +870,7 @@ def render_case_study_page() -> None:
     st.markdown(
         """
         <div class="takeaway-card">
-            <strong>Recruiter Takeaway</strong><br>
+            <strong>Project Impact</strong><br>
             Demonstrates end-to-end NLP, practical model evaluation, deployment-ready
             engineering, and product judgment for a healthcare-adjacent AI workflow.
         </div>
