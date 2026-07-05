@@ -8,11 +8,43 @@ This project demonstrates end-to-end machine learning, NLP preprocessing, model 
 
 ## Quick Links
 
+- Live app: [drug-review-nlp.streamlit.app](https://drug-review-nlp.streamlit.app)
 - Portfolio: [portfolio-self-one-10.vercel.app](https://portfolio-self-one-10.vercel.app)
 - Deployment guide: [DEPLOYMENT.md](DEPLOYMENT.md)
 - Project review: [REVIEW.md](REVIEW.md)
 - Main app file: [streamlit_app.py](streamlit_app.py)
 - Notebook: [notebook.ipynb](notebook.ipynb)
+
+## Application Screenshots
+
+### AI Prediction System
+
+![AI Prediction System](assets/screenshots/01-ai-prediction-system.png)
+
+![Prediction Result](assets/screenshots/03-prediction-result.png)
+
+### Technical Case Study
+
+![Technical Case Study Overview](assets/screenshots/04-technical-case-study-overview.png)
+
+![NLP Pipeline](assets/screenshots/06-nlp-pipeline.png)
+
+![Model Evaluation](assets/screenshots/08-model-evaluation.png)
+
+<details>
+<summary>More screenshots</summary>
+
+![Review Analyzer](assets/screenshots/02-review-analyzer.png)
+
+![EDA Dashboard](assets/screenshots/05-eda-dashboard.png)
+
+![Model Comparison](assets/screenshots/07-model-comparison.png)
+
+![Deployment Architecture](assets/screenshots/09-deployment-architecture.png)
+
+![GitHub Repository](assets/screenshots/10-github-repository.png)
+
+</details>
 
 ## Highlights
 
@@ -132,6 +164,8 @@ The app is designed as a polished AI product rather than a notebook demo.
 ├── README.md
 ├── DEPLOYMENT.md
 ├── REVIEW.md
+├── assets/
+│   └── screenshots/
 ├── requirements.txt
 ├── runtime.txt
 └── .gitignore
@@ -146,7 +180,7 @@ The app is designed as a polished AI product rather than a notebook demo.
 - TF-IDF
 - Linear SVM
 - Streamlit
-- Graphviz
+- Matplotlib
 - Jupyter Notebook
 
 ## Run Locally
@@ -192,7 +226,7 @@ See [DEPLOYMENT.md](DEPLOYMENT.md) for detailed deployment instructions.
 - Add unit tests for preprocessing and prediction.
 - Add a model card and dataset ethics note.
 - Add calibrated probabilities only after validation.
-- Add a short demo GIF and screenshots to the README.
+- Add a short demo GIF for the README.
 
 ## Portfolio Value
 
