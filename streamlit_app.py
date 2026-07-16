@@ -477,7 +477,7 @@ def render_sidebar() -> str:
         st.title("Patient NLP")
         page = st.radio(
             "Choose page",
-            ["AI Prediction System", "Technical Case Study"],
+            ["Review Classifier", "Technical Case Study"],
             label_visibility="collapsed",
             key="page",
         )
@@ -576,7 +576,7 @@ def render_prediction_page(model, tfidf, label_encoder, nlp_tools) -> None:
     st.markdown(
         """
         <div class="app-hero">
-            <div class="eyebrow">AI Prediction System</div>
+            <div class="eyebrow">Data Science & NLP Project</div>
             <h1>Patient Condition Classification using NLP</h1>
             <p class="muted">
             An end-to-end Natural Language Processing application that classifies patient
@@ -880,7 +880,7 @@ def render_case_study_page() -> None:
         <div class="takeaway-card">
             <strong>Project Impact</strong><br>
             Demonstrates end-to-end NLP, practical model evaluation, deployment-ready
-            engineering, and product judgment for a healthcare-adjacent AI workflow.
+            engineering, and product judgment for a healthcare-adjacent machine learning workflow.
         </div>
         """,
         unsafe_allow_html=True,
@@ -890,7 +890,7 @@ def render_case_study_page() -> None:
     with final_cols[0]:
         with st.container(border=True):
             st.subheader("Challenges")
-            st.write("Class imbalance, preprocessing consistency, dependency compatibility, and responsible AI framing.")
+            st.write("Class imbalance, preprocessing consistency, dependency compatibility, and responsible model framing.")
     with final_cols[1]:
         with st.container(border=True):
             st.subheader("Lessons Learned")
@@ -919,7 +919,7 @@ except Exception as exc:
     st.exception(exc)
     st.stop()
 
-if page == "AI Prediction System":
+if page == "Review Classifier":
     render_prediction_page(model, tfidf, label_encoder, nlp_tools)
 else:
     render_case_study_page()

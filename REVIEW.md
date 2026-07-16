@@ -4,7 +4,7 @@
 
 This is a strong applied NLP portfolio project with a clear objective: classify patient drug reviews into three condition categories using supervised machine learning. The model choice is sensible. TF-IDF + Linear SVM is fast, explainable, easy to deploy, and performs well on this dataset.
 
-The project already demonstrates meaningful AI engineering skills: dataset filtering, text preprocessing, EDA, model comparison, hyperparameter tuning, evaluation, serialization, and Streamlit deployment. The main weaknesses were deployment polish, preprocessing mismatch in the app, missing dependency files, and limited public-facing documentation. Those have been addressed with an updated `streamlit_app.py`, `README.md`, `requirements.txt`, `runtime.txt`, `.gitignore`, and this review document.
+The project already demonstrates meaningful machine learning engineering skills: dataset filtering, text preprocessing, EDA, model comparison, hyperparameter tuning, evaluation, serialization, and Streamlit deployment. The main weaknesses were deployment polish, preprocessing mismatch in the app, missing dependency files, and limited public-facing documentation. Those have been addressed with an updated `streamlit_app.py`, `README.md`, `requirements.txt`, `runtime.txt`, `.gitignore`, and this review document.
 
 ## Understanding of the Project
 

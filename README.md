@@ -2,9 +2,9 @@
 
 An applied NLP system that classifies patient drug reviews into **Depression**, **Diabetes, Type 2**, or **High Blood Pressure** using an interpretable **TF-IDF + Linear SVM** pipeline.
 
-This project demonstrates end-to-end machine learning, NLP preprocessing, model evaluation, Streamlit deployment, and product-focused AI application design.
+This project demonstrates end-to-end machine learning, NLP preprocessing, model evaluation, Streamlit deployment, and product-focused machine learning application design.
 
-> Portfolio theme: **Building intelligent AI systems that solve real-world problems.**
+> Portfolio theme: **Building intelligent data science systems that solve real-world problems.**
 
 ## Quick Links
 
@@ -17,39 +17,25 @@ This project demonstrates end-to-end machine learning, NLP preprocessing, model 
 
 ## Application Screenshots
 
-### AI Prediction System
+### Review Classifier
 
-![AI Prediction System](assets/screenshots/01-ai-prediction-system.png)
+![Review Classifier Dashboard](assets/01-review-classifier-home.png)
 
-![Prediction Result](assets/screenshots/03-prediction-result.png)
+![Prediction Result](assets/02-prediction-result.png)
 
 ### Technical Case Study
 
-![Technical Case Study Overview](assets/screenshots/04-technical-case-study-overview.png)
+![Technical Case Study Overview](assets/03-case-study-eda.png)
 
-![NLP Pipeline](assets/screenshots/06-nlp-pipeline.png)
+![Model Comparison](assets/04-model-comparison.png)
 
-![Model Evaluation](assets/screenshots/08-model-evaluation.png)
+![Model Evaluation](assets/05-evaluation-metrics.png)
 
-<details>
-<summary>More screenshots</summary>
-
-![Review Analyzer](assets/screenshots/02-review-analyzer.png)
-
-![EDA Dashboard](assets/screenshots/05-eda-dashboard.png)
-
-![Model Comparison](assets/screenshots/07-model-comparison.png)
-
-![Deployment Architecture](assets/screenshots/09-deployment-architecture.png)
-
-![GitHub Repository](assets/screenshots/10-github-repository.png)
-
-</details>
 
 ## Highlights
 
 - Two-page Streamlit application:
-  - **AI Prediction System** for live review classification
+  - **Review Classifier** for live review classification
   - **Technical Case Study** for the engineering journey
 - Classical NLP pipeline using TF-IDF unigram and bigram features
 - Tuned Linear SVM final model
@@ -125,9 +111,9 @@ Final model:
 
 ## Streamlit Application
 
-The app is designed as a polished AI product rather than a notebook demo.
+The app is designed as a polished machine learning product rather than a notebook demo.
 
-### Page 1: AI Prediction System
+### Page 1: Review Classifier
 
 - One-click sample reviews
 - Patient review input
@@ -230,4 +216,4 @@ See [DEPLOYMENT.md](DEPLOYMENT.md) for detailed deployment instructions.
 
 ## Portfolio Value
 
-This project demonstrates practical NLP, supervised machine learning, model comparison, evaluation, artifact serialization, deployment readiness, and product-oriented AI application design.
+This project demonstrates practical NLP, supervised machine learning, model comparison, evaluation, artifact serialization, deployment readiness, and product-oriented machine learning application design.
